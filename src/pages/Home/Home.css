@@ -62,6 +62,12 @@
   background: #6d6d6e66;
 }
 
+.search-section {
+  width: 100%;
+  padding: 40px 6vw;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 100%);
+}
+
 .more-cards {
   width: 100%;
   padding-left: 3vw;
@@ -93,6 +99,10 @@
     justify-content: center;
   }
 
+  .search-section {
+    padding: 30px 5vw;
+  }
+
   .more-cards {
     padding-left: 5vw;
   }
@@ -106,5 +116,9 @@
   .hero-btns .btn {
     font-size: 0.9rem;
     padding: 0.6rem 1rem;
+  }
+
+  .search-section {
+    padding: 20px 5vw;
   }
 }
