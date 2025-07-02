@@ -1,5 +1,7 @@
 import React from 'react'
 import Navbar from '../../components/Navbar/Navbar'
+import SearchBar from '../../components/SearchBar/SearchBar'
+import GeminiRecommendations from '../../components/GeminiRecommendations/GeminiRecommendations'
 import hero_banner from '../../assets/hero_banner.jpg'; 
 import hero_title from '../../assets/hero_title.png';   
 import play_icon from '../../assets/play_icon.png';     
@@ -7,6 +9,7 @@ import info_icon_icon from '../../assets/info_icon.png';
 import TitleCards from '../../components/TitleCards/TitleCards';
 import Footer from '../../components/Footer/Footer';
 import './Home.css'
+
 const Home = () => {
   return (
     <div className='home'>
@@ -28,15 +31,20 @@ const Home = () => {
           </div>
           <TitleCards />
         </div>
-
       </div>
-              <div className="more-cards">
-  <TitleCards title="Blockbuster Movies" category={"top_rated"}/>
-  <TitleCards title="Only on Netflix" category={"popular"} />
-  <TitleCards title="Upcoming"  category={"upcoming"}/>
-  <TitleCards title="Blockbuster Movies" category={"now_playing"}/>
-</div>
-<Footer />
+      
+      <div className="search-section">
+        <SearchBar />
+        <GeminiRecommendations />
+      </div>
+      
+      <div className="more-cards">
+        <TitleCards title="Blockbuster Movies" category={"top_rated"}/>
+        <TitleCards title="Only on Netflix" category={"popular"} />
+        <TitleCards title="Upcoming" category={"upcoming"}/>
+        <TitleCards title="Now Playing" category={"now_playing"}/>
+      </div>
+      <Footer />
     </div>
   );
 };

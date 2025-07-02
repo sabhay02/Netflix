@@ -1,7 +1,6 @@
-import React, { useRef, useState ,useEffect} from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import './Navbar.css';
 import logo from '../../assets/logo.png'
-import search_icon from '../../assets/search_icon.svg'
 import bell_icon from '../../assets/bell_icon.svg';
 import profile_img from '../../assets/profile_img.png';
 import caret_icon from '../../assets/caret_icon.svg';
@@ -9,7 +8,7 @@ import { logout } from '../../firebase';
 
 const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
- const navRef = useRef();
+  const navRef = useRef();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,6 +24,7 @@ const Navbar = () => {
     // Cleanup
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
   return (
     <div ref={navRef} className='navbar'>
       <div className='navbar-left'>
@@ -40,7 +40,6 @@ const Navbar = () => {
       </div>
 
       <div className='navbar-right'>
-        <img src={search_icon} alt="search" className='icons' />
         <p>Children</p>
         <img src={bell_icon} alt="notifications" className='icons' />
         <div className='navbar-profile' onClick={() => setShowDropdown(!showDropdown)}>
@@ -48,7 +47,7 @@ const Navbar = () => {
           <img src={caret_icon} alt="caret" />
           {showDropdown && (
             <div className="dropdown">
-              <p onClick={()=>logout()}>Sign Out of Netflix</p>
+              <p onClick={() => logout()}>Sign Out of Netflix</p>
             </div>
           )}
         </div>
