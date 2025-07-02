@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 
 const TitleCards = ({ title, category }) => {
   const cardsRef = useRef();
-  const [apiData,setApiData]=useState([])
+  const [apiData, setApiData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const options = {
     method: 'GET',
@@ -16,49 +17,7 @@ const TitleCards = ({ title, category }) => {
 
   const handleWheel = (event) => {
     event.preventDefault();
-    const container = cardsRef.current;
-    container.scrollLeft += event.deltaY;
-    updateScrollButtons();
-  };
-
-  const scrollLeft = () => {
-    const container = cardsRef.current;
-    container.scrollBy({
-      left: -300,
-      behavior: 'smooth'
-    });
-  };
-
-  const scrollRight = () => {
-    const container = cardsRef.current;
-    container.scrollBy({
-      left: 300,
-      behavior: 'smooth'
-    });
-  };
-
-  const updateScrollButtons = () => {
-    const container = cardsRef.current;
-    if (container) {
-      setCanScrollLeft(container.scrollLeft > 0);
-      setCanScrollRight(
-        container.scrollLeft < container.scrollWidth - container.clientWidth
-      );
-    }
-  };
-
-  const getGenreText = (category) => {
-    const genreMap = {
-      'top_rated': 'Top Rated',
-      'popular': 'Netflix Original',
-      'upcoming': 'Coming Soon',
-      'now_playing': 'New Release'
-    };
-    return genreMap[category] || 'Featured';
-  };
-
-  const formatRating = (rating) => {
-    return rating ? rating.toFixed(1) : 'N/A';
+    cardsRef.current.scrollLeft += event.deltaY;
   };
 
   const getGenreText = (category) => {
@@ -79,25 +38,35 @@ const TitleCards = ({ title, category }) => {
     const endpoint = category ? category : "now_playing";
     setIsLoading(true);
 
-fetch(`https://api.themoviedb.org/3/movie/${endpoint}?language=en-US&page=1`, options)
-  .then(res => res.json())
-  .then(res => {
-    console.log("API Response:", res);
-    setApiData(res.results || []);
-  })
-  .catch(err => console.error("API Error:", err));
-
-
-
+    fetch(`https://api.themoviedb.org/3/movie/${endpoint}?language=en-US&page=1`, options)
+      .then(res => res.json())
+      .then(res => {
+        setApiData(res.results || []);
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.error("API Error:", err);
+        setIsLoading(false);
+      });
 
     const ref = cardsRef.current;
-    ref.addEventListener('wheel', handleWheel);
-    return () => ref.removeEventListener('wheel', handleWheel);
-  }, []);
+    if (ref) {
+      ref.addEventListener('wheel', handleWheel);
+      return () => ref.removeEventListener('wheel', handleWheel);
+    }
+  }, [category]);
+
+  const renderSkeletonCards = () => {
+    return Array(8).fill(0).map((_, index) => (
+      <div key={index} className="card">
+        <div className="card-skeleton"></div>
+      </div>
+    ));
+  };
 
   return (
     <div className='title-cards'>
-      <h2>{title?title:"Popular on Netflix"}</h2>
+      <h2>{title ? title : "Popular on Netflix"}</h2>
       <div className='card-list' ref={cardsRef}>
         {isLoading ? (
           renderSkeletonCards()
