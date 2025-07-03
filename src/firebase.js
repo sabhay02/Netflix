@@ -31,10 +31,16 @@ const signup = async (name, email, password) => {
 
     toast.success("Account created successfully!");
   } catch (error) {
-    console.error("Signup error:", error);
-    toast.error(error.code.split('/')[1].split('-').join(" "));    
+    if (error.code === "auth/email-already-in-use") {
+      // If already exists, just log in instead
+      await login(email, password);
+    } else {
+      console.error("Signup error:", error);
+      toast.error(error.code.split('/')[1].split('-').join(" "));
+    }
   }
 };
+
 
 const login = async (email, password) => {
     try {
@@ -47,18 +53,7 @@ const login = async (email, password) => {
         }
     } catch (error) {
         console.log(error);
-
-        // Auto-create demo user if not found
-        if (email === "demo@netflix.com" && error.code === 'auth/user-not-found') {
-            try {
-                await signup("Demo User", email, password); // You can customize name
-                toast.success("Demo account created. You're now logged in.");
-            } catch (e) {
-                toast.error("Failed to auto-create demo account.");
-            }
-        } else {
             toast.error(error.code.split('/')[1].split('-').join(" "));    
-        }
     }
 }
 
