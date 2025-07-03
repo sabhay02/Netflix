@@ -22,12 +22,11 @@ const Login = () => {
      setLoading(false);
 }
 
-    const demoLogin = async () => {
-        setLoading(true);
-        // Use demo credentials
-        await login("demo@netflix.com", "demo123456");
-        setLoading(false);
-    }
+const demoLogin = async () => {
+  setLoading(true);
+  await signup("Demo User", "demo@netflix.com", "demo123456");
+  setLoading(false);
+};
 
     return (
          loading ? (
