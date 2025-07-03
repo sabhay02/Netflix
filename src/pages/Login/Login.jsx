@@ -3,6 +3,7 @@ import './Login.css';
 import logo from '../../assets/logo.png';
 import {login,signup} from "../../firebase"
 import netflix_spinner from '../../assets/netflix_spinner.gif';
+
 const Login = () => {
    const [signState,setsignState]=useState('Sign In')
     const [loading,setLoading]=useState(false)
@@ -21,6 +22,13 @@ const Login = () => {
      setLoading(false);
 }
 
+    const demoLogin = async () => {
+        setLoading(true);
+        // Use demo credentials
+        await login("demo@netflix.com", "demo123456");
+        setLoading(false);
+    }
+
     return (
          loading ? (
                 <div className="login-spinner">
@@ -31,6 +39,25 @@ const Login = () => {
             <img src={logo} className='login-logo' alt="Company Logo" />
             <div className="login-form">
                 <h1>{signState}</h1>
+                
+                {/* Demo Login Section */}
+                <div className="demo-section">
+                    <button 
+                        type="button" 
+                        className="demo-button"
+                        onClick={demoLogin}
+                    >
+                        🎬 Demo Login (For Recruiters)
+                    </button>
+                    <p className="demo-text">
+                        Quick access for recruiters and employers - no signup required!
+                    </p>
+                </div>
+
+                <div className="divider">
+                    <span>OR</span>
+                </div>
+
                 <form>
                     {signState=="Sign Up"?                    <input value={name} onChange={(e)=>{setName(e.target.value)}} type="text" placeholder='Your name' />:<></>
 }
@@ -53,6 +80,5 @@ const Login = () => {
         </div>
     );
 };
-
 
 export default Login;

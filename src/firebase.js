@@ -13,46 +13,54 @@ const firebaseConfig = {
   appId: "1:1014798401383:web:0a61322e07096808ddb9c2"
 };
 
-
 const app = initializeApp(firebaseConfig);
 const auth=getAuth(app);
 const db=getFirestore(app);
 
 const signup = async (name, email, password) => {
   try {
-    
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-   
     await addDoc(collection(db, "user"), {
       uid: user.uid,
       name,
       authProvider: "local",
       email,
-      
     });
 
-
+    toast.success("Account created successfully!");
   } catch (error) {
     console.error("Signup error:", error);
-toast.error(error.code.split('/')[1].split('-').join(" "));    
-  
-    
+    toast.error(error.code.split('/')[1].split('-').join(" "));    
   }
 };
 
 const login = async (email, password) => {
     try {
         await signInWithEmailAndPassword(auth, email, password);
+        
+        // Show different messages for demo vs regular login
+        if (email === "demo@netflix.com") {
+            toast.success("Welcome! You're using the demo account for recruiters.");
+        } else {
+            toast.success("Welcome back!");
+        }
     } catch (error) {
         console.log(error);
-toast.error(error.code.split('/')[1].split('-').join(" "));    
-}
-
+        
+        // Special handling for demo account if it doesn't exist
+        if (email === "demo@netflix.com" && error.code === 'auth/user-not-found') {
+            toast.error("Demo account not found. Please contact the developer.");
+        } else {
+            toast.error(error.code.split('/')[1].split('-').join(" "));    
+        }
+    }
 }
 
 const logout = () => {
     signOut(auth);  
+    toast.info("You've been logged out successfully.");
 }
+
 export {auth,db,signup,login,logout}
