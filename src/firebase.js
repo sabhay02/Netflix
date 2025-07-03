@@ -39,8 +39,7 @@ const signup = async (name, email, password) => {
 const login = async (email, password) => {
     try {
         await signInWithEmailAndPassword(auth, email, password);
-        
-        // Show different messages for demo vs regular login
+
         if (email === "demo@netflix.com") {
             toast.success("Welcome! You're using the demo account for recruiters.");
         } else {
@@ -48,15 +47,21 @@ const login = async (email, password) => {
         }
     } catch (error) {
         console.log(error);
-        
-        // Special handling for demo account if it doesn't exist
+
+        // Auto-create demo user if not found
         if (email === "demo@netflix.com" && error.code === 'auth/user-not-found') {
-            toast.error("Demo account not found. Please contact the developer.");
+            try {
+                await signup("Demo User", email, password); // You can customize name
+                toast.success("Demo account created. You're now logged in.");
+            } catch (e) {
+                toast.error("Failed to auto-create demo account.");
+            }
         } else {
             toast.error(error.code.split('/')[1].split('-').join(" "));    
         }
     }
 }
+
 
 const logout = () => {
     signOut(auth);  
